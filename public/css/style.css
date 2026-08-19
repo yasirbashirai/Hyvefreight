@@ -180,7 +180,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
   position: relative; min-height: 100svh; display: flex; align-items: center;
   overflow: hidden; padding: 7.5rem 0 5rem;
 }
-.hero-media { position: absolute; inset: -8% 0; z-index: -2; }
+.hero-media { position: absolute; inset: -16% 0; z-index: -2; }
 .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; }
 .hero .hero-media img { filter: saturate(1.25) contrast(1.08) brightness(1.02); }
 .hero-scrim {
@@ -560,7 +560,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
    ============================================================ */
 .site-footer { background: var(--ink); color: rgba(255,255,255,.72); padding: 4.5rem 0 2rem; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 2.5rem; margin-bottom: 3rem; }
-.footer-brand .brand-hex { width: 56px; margin-bottom: 1rem; }
+.footer-brand .brand-hex { width: 92px; padding: 12px; margin-bottom: 1.2rem; }
 .footer-brand p { font-size: .92rem; max-width: 300px; }
 .footer-brand .hex-tags { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.2rem; }
 .footer-brand .hex-tags span {
@@ -599,3 +599,16 @@ html.no-anim .hero, html.no-anim .page-hero { min-height: 860px; }
 
 /* supplied brand hero photo (very wide), keep truck center-right */
 .hero .hero-media img { object-position: 55% 48%; }
+
+/* mobile: stronger uniform hero wash so headline/tagline stay legible */
+@media (max-width: 700px) {
+  .hero-scrim {
+    background: linear-gradient(to bottom, rgba(250,252,245,.85) 0%, rgba(250,252,245,.6) 55%, rgba(255,255,255,.9) 100%);
+  }
+}
+
+/* footer logo: brighten the neon artwork on the dark ground */
+.site-footer .brand-hex {
+  background: #10130a;
+  filter: brightness(2.1) saturate(1.15) drop-shadow(0 0 14px rgba(139,207,6,.55));
+}

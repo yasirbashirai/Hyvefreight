@@ -138,7 +138,7 @@
     document.querySelectorAll('[data-speed]').forEach(function (el) {
       var speed = parseFloat(el.getAttribute('data-speed'));
       gsap.to(el, {
-        yPercent: speed * 14,
+        yPercent: speed * 9,
         ease: 'none',
         scrollTrigger: { trigger: el.closest('section') || el, start: 'top bottom', end: 'bottom top', scrub: true }
       });
@@ -197,3 +197,19 @@
   var yr = document.getElementById('year');
   if (yr) yr.textContent = new Date().getFullYear();
 })();
+
+/* temporary debug: ?debugw reports widest elements in the title */
+if (location.search.indexOf('debugw') !== -1) {
+  window.addEventListener('load', function () {
+    var doc = document.documentElement;
+    var out = 'sw=' + doc.scrollWidth + ' vw=' + window.innerWidth;
+    var offenders = [];
+    document.querySelectorAll('*').forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.right > window.innerWidth + 2 || r.left < -2) {
+        offenders.push(el.tagName + '.' + (el.className && el.className.baseVal ? el.className.baseVal : el.className || '').toString().split(' ')[0] + ':' + Math.round(r.left) + '-' + Math.round(r.right));
+      }
+    });
+    document.title = out + ' | ' + offenders.slice(0, 12).join(' | ');
+  });
+}
