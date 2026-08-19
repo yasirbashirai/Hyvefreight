@@ -612,3 +612,55 @@ html.no-anim .hero, html.no-anim .page-hero { min-height: 860px; }
   background: #10130a;
   filter: brightness(2.1) saturate(1.15) drop-shadow(0 0 14px rgba(139,207,6,.55));
 }
+
+/* ============================================================
+   RESPONSIVE FIXES
+   ============================================================ */
+
+/* flex children must be allowed to shrink (long emails, checklist text) */
+.quote-points li > div { min-width: 0; overflow-wrap: anywhere; }
+.trust-item > div { min-width: 0; }
+.footer-contact a { overflow-wrap: anywhere; }
+
+/* hex badge: keep inside the viewport on small screens */
+@media (max-width: 640px) {
+  .split-media .hex-badge { right: 8px; bottom: 18px; width: 96px; height: 108px; }
+  .split-media .hex-badge strong { font-size: 1.2rem; }
+}
+
+/* tablet/laptop in-between: keep header on one tidy line */
+@media (min-width: 901px) and (max-width: 1180px) {
+  .header-inner { gap: 1.2rem; }
+  .main-nav { gap: 1.1rem; }
+  .main-nav a { font-size: .76rem; letter-spacing: .08em; }
+  .header-cta { padding: .7rem 1.1rem; font-size: .72rem; }
+  .brand-word .brand-name { font-size: 1.45rem; }
+  .brand-word .brand-sub { letter-spacing: .28em; }
+  .brand-hex { width: 46px; }
+}
+
+/* small phones: calmer hero type so nothing crowds */
+@media (max-width: 420px) {
+  .hero-title { font-size: 2.9rem; }
+  .hero-partners { font-size: 3.9rem; }
+  .hero-ctas .btn { width: 100%; }
+  .section { padding: 3.8rem 0; }
+}
+
+/* phones: comfortable paddings and stacked grids everywhere */
+@media (max-width: 560px) {
+  .info-card { padding: 1.6rem 1.3rem; }
+  .form-card { padding: 1.4rem 1.2rem; }
+  .cta-band .hero-ctas .btn { width: min(320px, 100%); }
+  .page-hero { min-height: 52svh; padding-top: 7.5rem; }
+  .footer-bottom { flex-direction: column; gap: .4rem; }
+}
+
+/* grid children may always shrink; date/select inputs have big intrinsic minimums */
+.quote-wrap > *, .split > *, .card-grid > *, .form-grid > *, .footer-grid > * { min-width: 0; }
+.field input, .field select, .field textarea { min-width: 0; max-width: 100%; }
+
+/* mobile: deeper lime for tagline words over the light wash */
+@media (max-width: 700px) {
+  .hero-tag .lime { color: #6fa708; }
+}
