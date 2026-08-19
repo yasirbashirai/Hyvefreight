@@ -186,6 +186,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
 .hero-scrim {
   position: absolute; inset: 0; z-index: -1;
   background:
+    linear-gradient(to bottom, rgba(255,255,255,.65) 0%, transparent 16%),
     linear-gradient(100deg, rgba(250, 252, 245, .9) 0%, rgba(250, 252, 245, .62) 32%, rgba(250,252,245,.06) 60%, rgba(7,7,7,0) 100%),
     linear-gradient(to top, rgba(255,255,255,.75) 0%, transparent 22%);
 }
@@ -595,3 +596,6 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
 html.no-anim { scroll-behavior: auto; }
 html.no-anim .reveal { opacity: 1; transform: none; transition: none; }
 html.no-anim .hero, html.no-anim .page-hero { min-height: 860px; }
+
+/* supplied brand hero photo (very wide), keep truck center-right */
+.hero .hero-media img { object-position: 55% 48%; }

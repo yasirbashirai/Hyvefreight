@@ -57,7 +57,7 @@
   document.querySelectorAll('form[data-mailform]').forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var subject = form.getAttribute('data-subject') || 'Website Inquiry — hyvedelivers.com';
+      var subject = form.getAttribute('data-subject') || 'Website Inquiry - hyvedelivers.com';
       var lines = [];
       form.querySelectorAll('input, select, textarea').forEach(function (f) {
         if (f.name && f.value) lines.push(f.name + ': ' + f.value);
@@ -65,7 +65,7 @@
       window.location.href = 'mailto:sales@hyvedelivers.com?subject=' +
         encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
       var note = form.querySelector('.form-note');
-      if (note) note.textContent = 'Your email app should open with the details filled in — just hit send. Or email us directly at sales@hyvedelivers.com.';
+      if (note) note.textContent = 'Your email app should open with the details filled in, just hit send. Or email us directly at sales@hyvedelivers.com.';
     });
   });
 
