@@ -595,3 +595,187 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
 html.no-anim { scroll-behavior: auto; }
 html.no-anim .reveal { opacity: 1; transform: none; transition: none; }
 html.no-anim .hero, html.no-anim .page-hero { min-height: 860px; }
+
+/* ============================================================
+   V2 UPGRADE — mirrored hero, ticker, journey scene, polish
+   ============================================================ */
+
+/* ---------- hero (mirrored: truck left, driving right toward copy) ---------- */
+.hero-flip .hero-scrim {
+  background:
+    linear-gradient(-100deg, rgba(250, 252, 245, .94) 0%, rgba(250, 252, 245, .72) 34%, rgba(250,252,245,.1) 62%, rgba(7,7,7,0) 100%),
+    linear-gradient(to top, rgba(255,255,255,.75) 0%, transparent 22%);
+}
+.hero-flip .hero-content { margin-left: auto; }
+@media (max-width: 900px) { .hero-flip .hero-content { margin-left: 0; } }
+
+/* floating hex outlines in hero */
+.hero-hexes { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.hero-hexes svg { position: absolute; }
+.hero-hexes path { fill: none; stroke: var(--lime-deep); stroke-width: 2; opacity: .35; }
+.hero-hexes .hx1 { width: 130px; top: 18%; left: 8%; }
+.hero-hexes .hx2 { width: 70px;  top: 64%; left: 30%; opacity: .8; }
+.hero-hexes .hx3 { width: 200px; top: 10%; right: 6%; }
+@media (max-width: 900px) { .hero-hexes { display: none; } }
+
+/* ---------- scroll progress bar ---------- */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 1200;
+  background: linear-gradient(90deg, var(--lime-deep), var(--lime-bright));
+  box-shadow: 0 0 10px rgba(139,207,6,.6);
+}
+
+/* ---------- brand ticker ---------- */
+.ticker {
+  background: linear-gradient(90deg, var(--lime-deep), var(--lime) 55%, var(--lime-bright));
+  overflow: hidden; padding: .95rem 0; position: relative; z-index: 2;
+}
+.ticker-track { display: flex; width: max-content; animation: tickerMove 30s linear infinite; }
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: flex; align-items: center; flex: none;
+  font-family: var(--font-head); font-weight: 800; font-size: .92rem;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--ink); white-space: nowrap;
+}
+.ticker-item::after {
+  content: ''; width: 13px; height: 15px; margin: 0 2.2rem; flex: none;
+  background: var(--ink);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+@keyframes tickerMove { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+html.no-anim .ticker-track { animation: none; }
+
+/* ============================================================
+   JOURNEY SCENE — pinned desert drive, truck rides on scroll
+   ============================================================ */
+.journey {
+  position: relative; height: 100vh; min-height: 620px; overflow: hidden;
+  background: linear-gradient(to bottom,
+    #fdf8ec 0%, #fdefd2 34%, #fbe0ae 56%, #f4cf92 72%, #eabf7d 84%, #dfae66 100%);
+}
+.j-sun {
+  position: absolute; left: 50%; top: 46%; width: 340px; height: 340px; transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,244,204,.95) 0%, rgba(255,224,150,.55) 42%, rgba(255,214,130,0) 70%);
+}
+.j-layer { position: absolute; left: -12%; right: -12%; bottom: 17.5vh; }
+.j-layer svg { display: block; width: 100%; height: auto; }
+.j-far  { opacity: .5; bottom: 19vh; }
+.j-near { opacity: .82; }
+.j-road {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18vh; min-height: 110px;
+  background: linear-gradient(to bottom, #262822 0%, #191b16 30%, #121310 100%);
+}
+.j-road::before { /* shoulder line */
+  content: ''; position: absolute; left: 0; right: 0; top: 8%; height: 3px; background: rgba(255,255,255,.25);
+}
+.j-dashes {
+  position: absolute; left: 0; right: 0; top: 46%; height: 6px;
+  background: repeating-linear-gradient(90deg, var(--lime) 0 70px, transparent 70px 150px);
+  opacity: .85; filter: drop-shadow(0 0 6px rgba(159,232,15,.5));
+}
+.j-truck {
+  position: absolute; bottom: calc(18vh - 14px); left: 0; width: clamp(240px, 26vw, 380px);
+  will-change: transform; z-index: 4;
+  filter: drop-shadow(0 18px 22px rgba(20, 16, 4, .35));
+}
+.j-truck svg { display: block; width: 100%; height: auto; }
+.j-truck .wheel { transform-origin: center; transform-box: fill-box; }
+
+/* milestones */
+.j-stops { position: absolute; left: 0; right: 0; top: 34%; height: 30%; z-index: 3; }
+.j-stopline {
+  position: absolute; left: 8%; right: 8%; top: 26px; height: 0;
+  border-top: 2px dashed rgba(7,7,7,.22);
+}
+.j-stop { position: absolute; top: 0; transform: translateX(-50%); text-align: center; width: 170px; }
+.j-stop .j-hex {
+  width: 46px; height: 52px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.75); border: 0; position: relative;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  outline: 2px solid rgba(7,7,7,.25); outline-offset: -2px;
+  transition: background .45s ease, box-shadow .45s ease, transform .45s ease;
+}
+.j-stop .j-hex svg { width: 22px; height: 22px; stroke: var(--ink); }
+.j-stop strong {
+  display: block; font-family: var(--font-head); font-size: .78rem; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase; color: rgba(7,7,7,.55);
+  transition: color .45s ease;
+}
+.j-stop span { font-size: .78rem; color: rgba(7,7,7,.45); transition: color .45s ease; }
+.j-stop.lit .j-hex {
+  background: linear-gradient(140deg, var(--lime-deep), var(--lime-bright));
+  box-shadow: 0 0 26px rgba(159,232,15,.75); transform: translateY(-4px);
+}
+.j-stop.lit strong { color: var(--ink); }
+.j-stop.lit span { color: rgba(7,7,7,.7); }
+
+/* destination depot */
+.j-dest { position: absolute; right: 2.5%; bottom: calc(18vh - 4px); width: clamp(150px, 15vw, 230px); z-index: 2; }
+.j-dest svg { display: block; width: 100%; height: auto; }
+.j-dest .door { transition: fill .5s ease, filter .5s ease; }
+.j-dest.lit .door { fill: var(--lime); filter: drop-shadow(0 0 14px rgba(159,232,15,.9)); }
+
+/* scene heading */
+.j-head { position: absolute; top: clamp(4rem, 9vh, 7rem); left: 0; right: 0; text-align: center; z-index: 5; }
+.j-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.8rem); font-weight: 900; color: var(--ink); }
+.j-head h2 .script { color: var(--lime-deep); font-size: 1.25em; }
+.j-head p {
+  font-family: var(--font-head); font-size: .74rem; font-weight: 700; letter-spacing: .26em;
+  text-transform: uppercase; color: rgba(7,7,7,.5); margin-top: .5rem;
+}
+
+/* journey fallbacks: mobile / reduced motion / noanim */
+@media (max-width: 900px) {
+  .journey { height: auto; min-height: 0; padding-top: 4.5rem; }
+  .journey .j-scene-wrap { position: relative; height: 480px; }
+  .j-stop { width: 120px; }
+  .j-stop span { display: none; }
+}
+.journey.static .j-stop .j-hex { background: linear-gradient(140deg, var(--lime-deep), var(--lime-bright)); box-shadow: 0 0 20px rgba(159,232,15,.6); }
+.journey.static .j-stop strong { color: var(--ink); }
+.journey.static .j-truck { left: 38%; }
+.journey.static .j-dest .door { fill: var(--lime); }
+
+/* ---------- hex frames draw themselves ---------- */
+.hex-icon .hex-frame path { stroke-dasharray: 400; stroke-dashoffset: 0; }
+html.no-anim .hex-icon .hex-frame path { stroke-dashoffset: 0 !important; }
+
+/* ---------- statement decoration hex ---------- */
+.statement .deco-hex { position: absolute; right: 6%; top: 50%; width: min(340px, 26vw); transform: translateY(-50%); opacity: .8; pointer-events: none; }
+.statement .deco-hex path { fill: none; stroke: var(--lime); stroke-width: 2.5; filter: drop-shadow(0 0 12px rgba(159,232,15,.6)); }
+@media (max-width: 900px) { .statement .deco-hex { display: none; } }
+
+/* ---------- footer giant tagline ---------- */
+.footer-tagline {
+  font-family: var(--font-head); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(1.3rem, 3.6vw, 3rem); line-height: 1.15; letter-spacing: .02em;
+  color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.28);
+  border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 2.2rem; margin-bottom: 2.8rem;
+}
+.footer-tagline .lime { color: var(--lime); -webkit-text-stroke: 0; }
+
+/* ---------- service strip: lime edge on open card ---------- */
+.svc { outline: 2px solid transparent; outline-offset: -2px; transition: flex .55s cubic-bezier(.5,0,.15,1), outline-color .4s ease; }
+.svc.open { outline-color: var(--lime); }
+.svc .num { text-shadow: 0 0 12px rgba(159,232,15,.8); }
+
+/* ---------- photo & info card lime hover glow ---------- */
+.photo-card { outline: 2px solid transparent; outline-offset: -2px; transition: outline-color .35s ease; }
+.photo-card:hover { outline-color: var(--lime); }
+
+/* ---------- smooth-scroll host ---------- */
+html.lenis { height: auto; scroll-behavior: auto !important; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* QA (noanim) fixed-height journey so tall captures stay true */
+html.no-anim .journey { height: 860px; }
+html.no-anim .j-road { height: 150px; }
+html.no-anim .j-layer { bottom: 150px; }
+html.no-anim .j-far { bottom: 166px; }
+html.no-anim .j-truck { bottom: 136px; }
+html.no-anim .j-dest { bottom: 146px; }
+
+/* footer logo pops on dark ground */
+.site-footer .brand-hex { filter: drop-shadow(0 0 10px rgba(139,207,6,.55)) brightness(1.7); }

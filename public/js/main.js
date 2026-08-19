@@ -57,7 +57,7 @@
   document.querySelectorAll('form[data-mailform]').forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var subject = form.getAttribute('data-subject') || 'Website Inquiry — hyvedelivers.com';
+      var subject = form.getAttribute('data-subject') || 'Website Inquiry - hyvedelivers.com';
       var lines = [];
       form.querySelectorAll('input, select, textarea').forEach(function (f) {
         if (f.name && f.value) lines.push(f.name + ': ' + f.value);
@@ -65,7 +65,7 @@
       window.location.href = 'mailto:sales@hyvedelivers.com?subject=' +
         encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
       var note = form.querySelector('.form-note');
-      if (note) note.textContent = 'Your email app should open with the details filled in — just hit send. Or email us directly at sales@hyvedelivers.com.';
+      if (note) note.textContent = 'Your email app should open with the details filled in, just hit send. Or email us directly at sales@hyvedelivers.com.';
     });
   });
 
@@ -189,6 +189,7 @@
     }
     railLayout();
     window.addEventListener('resize', railLayout);
+    window.addEventListener('load', function () { setTimeout(railLayout, 500); });
     window.addEventListener('scroll', railUpdate, { passive: true });
     railUpdate();
   }
@@ -196,4 +197,102 @@
   /* ---------- footer year ---------- */
   var yr = document.getElementById('year');
   if (yr) yr.textContent = new Date().getFullYear();
+})();
+
+/* ============================================================
+   V2 — smooth scrolling, journey scene, hex draw, progress bar
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    location.search.indexOf('noanim') !== -1;
+
+  /* ---------- scroll progress bar ---------- */
+  var bar = document.querySelector('.scroll-progress');
+  if (bar) {
+    var paint = function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+    };
+    window.addEventListener('scroll', paint, { passive: true });
+    window.addEventListener('resize', paint);
+    paint();
+  }
+
+  /* ---------- Lenis smooth scrolling (desktop, motion allowed) ---------- */
+  var lenis = null;
+  if (window.Lenis && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      var raf = function (time) { lenis.raf(time); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    }
+    /* same-page anchors glide instead of jumping */
+    document.querySelectorAll('a[href^="#"]:not([data-quote])').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -70 }); }
+      });
+    });
+  }
+
+  /* ---------- journey scene: truck drives as you scroll ---------- */
+  var journey = document.querySelector('.journey');
+  if (journey) {
+    var stops = journey.querySelectorAll('.j-stop');
+    var dest = journey.querySelector('.j-dest');
+    var truck = journey.querySelector('.j-truck');
+    var dashes = journey.querySelector('.j-dashes');
+    var wheels = journey.querySelectorAll('.j-truck .wheel');
+    var desktop = window.matchMedia('(min-width: 901px)').matches;
+
+    if (!window.gsap || !window.ScrollTrigger || reduceMotion || !desktop) {
+      journey.classList.add('static');
+      stops.forEach(function (s) { s.classList.add('lit'); });
+      if (dest) dest.classList.add('lit');
+    } else {
+      var thresholds = [0.16, 0.4, 0.64, 0.88];
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: journey,
+          start: 'top top',
+          end: '+=2400',
+          scrub: 0.5,
+          pin: true,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            var p = self.progress;
+            if (dashes) dashes.style.backgroundPosition = (-p * 2200) + 'px 0';
+            wheels.forEach(function (w) { gsap.set(w, { rotation: p * 1080 }); });
+            stops.forEach(function (s, i) { s.classList.toggle('lit', p >= thresholds[i]); });
+            if (dest) dest.classList.toggle('lit', p >= 0.93);
+          }
+        }
+      });
+      tl.fromTo(truck, { x: -440 }, {
+        x: function () { return journey.offsetWidth * 0.60; },
+        ease: 'none', duration: 1
+      }, 0)
+        .fromTo('.j-far svg', { x: 0 }, { x: -70, ease: 'none', duration: 1 }, 0)
+        .fromTo('.j-near svg', { x: 0 }, { x: -150, ease: 'none', duration: 1 }, 0)
+        .fromTo('.j-sun', { xPercent: -50 }, { xPercent: -58, ease: 'none', duration: 1 }, 0);
+    }
+  }
+
+  /* ---------- hexagons draw themselves in ---------- */
+  if (window.gsap && window.ScrollTrigger && !reduceMotion) {
+    document.querySelectorAll('.hex-icon .hex-frame path, .statement .deco-hex path').forEach(function (path) {
+      var len = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+      gsap.to(path, {
+        strokeDashoffset: 0, duration: 1.4, ease: 'power2.out',
+        scrollTrigger: { trigger: path.closest('section') || path, start: 'top 72%' }
+      });
+    });
+  }
 })();
