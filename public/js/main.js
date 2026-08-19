@@ -6,6 +6,11 @@
   'use strict';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ?noanim — used for QA screenshots / motion-free preview */
+  if (location.search.indexOf('noanim') !== -1) {
+    document.documentElement.classList.add('no-anim');
+    reduceMotion = true;
+  }
 
   /* ---------- header: full lockup -> hex-only on scroll ---------- */
   var header = document.querySelector('.site-header');
