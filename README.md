@@ -43,13 +43,19 @@ Static site — deploy `public/` as root (Vercel auto-serves `public/`).
 
 ## Photography
 - Home hero + statement: client-supplied Hyve truck renders.
-- Capabilities strip and the Carriers / Industries heroes: Pexels (free commercial licence),
-  chosen service-by-service — `svc-ftl`, `svc-ltl`, `svc-reefer`, `svc-flatbed`,
-  `svc-expedited`, `svc-specialized`, `hero-carriers-cab`, `hero-industries-job`.
+- Capabilities strip: the client's own US truck photos (`~/long usa truck images`), one per
+  service — `svc-ftl` (Dry-Van-Trailer-2), `svc-ltl` (long trucks for freigt),
+  `svc-reefer` (refrigerated truck), `svc-flatbed` (Flatbed Truck image),
+  `svc-expedited` (white long truck), `svc-specialized` (Dump truck).
+  All output 1600x900. The flatbed (650px) and dump (700px) sources are upscaled and get an
+  unsharp pass; they are the two soft ones and would benefit from higher-res originals.
+  Note: the LTL shot carries another fleet's magenta decals on all four cabs — normal for a
+  broker showing carrier equipment, but it cannot be cropped out without cutting the cabs.
+- Carriers / Industries heroes: Pexels (free commercial licence) — `hero-carriers-cab`,
+  `hero-industries-job`.
 - About "Our Story": `story-arizona.jpg` (Superstition Mountains, east of Phoenix).
 - **All inner-page heroes render grayscale** (`.page-hero .hero-media img`) so the neon
   green and the typography carry the frame. The statement section's photo is knocked back
   the same way so the type stays the subject.
-- The client's earlier low-resolution photos (`client-flatbed` 650px, `client-tanker` 686px,
-  etc.) are still in `images/` but are no longer used on the Capabilities strip; they were
-  too small to hold a full-width panel.
+- The older `client-*.jpg` copies are still in `images/` but unused; the Capabilities strip
+  now builds from the originals in `~/long usa truck images`.
