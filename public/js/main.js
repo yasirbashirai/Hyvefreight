@@ -116,13 +116,15 @@
   if (window.gsap && !reduceMotion) {
     gsap.registerPlugin(ScrollTrigger);
 
-    /* hero strike-through draws itself, then "Partners" sweeps in */
-    var strike = document.querySelector('.strike-line path');
-    if (strike) {
-      var len = strike.getTotalLength();
-      gsap.set(strike, { strokeDasharray: len, strokeDashoffset: len });
-      var tl = gsap.timeline({ delay: 0.55 });
-      tl.to(strike, { strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut' })
+    /* hero: "Brokers" gets scribbled out pass by pass, then "Partners" is written in */
+    var strikes = document.querySelectorAll('.strike-line path');
+    if (strikes.length) {
+      strikes.forEach(function (pth) {
+        var l = pth.getTotalLength();
+        gsap.set(pth, { strokeDasharray: l, strokeDashoffset: l });
+      });
+      var tl = gsap.timeline({ delay: 0.5 });
+      tl.to(strikes, { strokeDashoffset: 0, duration: 0.32, ease: 'power3.inOut', stagger: 0.1 })
         .from('.hero-partners', { opacity: 0, y: 26, rotate: -10, duration: 0.7, ease: 'back.out(1.6)' }, '-=0.15')
         .from('.hero-tag', { opacity: 0, y: 18, duration: 0.5 }, '-=0.3')
         .from('.hero-ctas .btn', { opacity: 0, y: 16, stagger: 0.12, duration: 0.45 }, '-=0.25');
@@ -143,18 +145,37 @@
         scrollTrigger: { trigger: el.closest('section') || el, start: 'top bottom', end: 'bottom top', scrub: true }
       });
     });
-
-    /* hex standard connector dashes draw across */
-    var connector = document.querySelector('.hex-connector line');
-    if (connector) {
-      gsap.from(connector, {
-        attr: { x2: 0 },
-        duration: 1.4,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: '.hex-grid', start: 'top 70%' }
-      });
-    }
   }
+
+  /* ---------- THE HEX STANDARD: six live points around one hexagon ---------- */
+  document.querySelectorAll('.hexos').forEach(function (os) {
+    var nodes = os.querySelectorAll('.hexnode');
+    var readout = os.querySelector('.hexos-readout');
+    if (!nodes.length) return;
+
+    function activate(node) {
+      nodes.forEach(function (n) { n.classList.toggle('on', n === node); });
+      os.setAttribute('data-active', node.getAttribute('data-i'));
+      os.classList.add('engaged');
+      if (readout) readout.innerHTML = node.querySelector('.hx-pop').innerHTML;
+    }
+    function release() {
+      os.classList.remove('engaged');
+      nodes.forEach(function (n) { n.classList.remove('on'); });
+    }
+
+    nodes.forEach(function (node) {
+      node.addEventListener('mouseenter', function () { activate(node); });
+      node.addEventListener('focus', function () { activate(node); });
+      node.addEventListener('click', function (e) { e.preventDefault(); activate(node); });
+    });
+    /* the padding around the stage is part of the hover zone, so travelling
+       from a dot out to its pop-up never closes it */
+    os.addEventListener('mouseleave', release);
+
+    /* small screens read from the card below the hexagon, so seed it */
+    if (readout) readout.innerHTML = nodes[0].querySelector('.hx-pop').innerHTML;
+  });
 
   /* ---------- journey rail: truck rides the route as you scroll ---------- */
   var rail = document.querySelector('.journey-rail');

@@ -7,18 +7,30 @@ Conversion-focused marketing site for **Hyve Freight Services**, a freight broke
 ## Brand
 - Neon lime green (#9fe80f / #8bcf06) · white · light gray · charcoal (#070707)
 - Hexagon identity ("HYVE" hive) — HEXpertise · HEXecution · HEXcellence
-- Headline treatment: Freight ~~Brokers~~ *Partners* (script, neon green)
+- Headline treatment: Freight ~~Brokers~~ *Partners*. "Brokers" is scrubbed out by five
+  overlapping neon marker passes (`.strike-line .s1`–`.s5`, drawn on by GSAP); "Partners"
+  is handwritten Caveat in neon green. The word must stay readable under the scribble.
+- The six standards: HEXpertise · HEXecution · HEXcellence · HEXperience · HEXchange · HEXpectation
 - Taglines: "Every Side Connected. Every Load Delivered." · "Stronger Connections. Seamless Deliveries."
 
 ## Structure (5 pages, static — all in /public)
-- `index.html` — home: hero w/ animated strikethrough, trust bar, Who We Are, HEX Standard, services accordion, statement, quote section
+- `index.html` — home: hero w/ hand-scribbled cross-out, trust bar, Who We Are
+  ("The Name Says Broker. The Work Says Partner."), interactive HEX Standard hexagon,
+  services accordion, "Stronger Connections. Seamless Deliveries." second hero, quote section
 - `shippers.html` — services detail (FTL, LTL, reefer, flatbed, expedited, specialized) + process + stats
 - `carriers.html` — carrier benefits, requirements, carrier packet form
 - `industries.html` — 6 verticals + coverage
 - `about.html` — story, HEX standard, contact + forms
 
 ## Features
-- Logo lockup collapses to H-hexagon on scroll (Dynamo-style)
+- Logo lockup collapses to H-hexagon on scroll (Dynamo-style). The mark is the supplied
+  hexagon-H (`images/logo-mark.png`) shown as-is; do NOT re-apply a CSS hexagon clip-path
+  around it or it reads as a hexagon inside a hexagon.
+- **The HEX Standard** is one large hexagon with six live points (`.hexos`): the H sits at the
+  centre, each vertex carries a pulsing dot + label, and hovering/focusing a point opens a
+  card explaining that standard. Under 1160px the cards are replaced by a single readout
+  card beneath the hexagon, driven by the same JS. Markup is duplicated in `index.html`
+  and `about.html`, styles live under "THE HEX STANDARD" in `style.css`.
 - Scroll "journey rail": truck rides a route down the right edge, hex waypoints light up (desktop)
 - GSAP + ScrollTrigger (vendored in `public/js/vendor/`) — strike-draw, parallax, reveals
 - Quote modal on every page + inline forms
@@ -30,4 +42,14 @@ Conversion-focused marketing site for **Hyve Freight Services**, a freight broke
 Static site — deploy `public/` as root (Vercel auto-serves `public/`).
 
 ## Photography
-Unsplash (free commercial license) — desert/golden-hour trucking to match brand direction.
+- Home hero + statement: client-supplied Hyve truck renders.
+- Capabilities strip and the Carriers / Industries heroes: Pexels (free commercial licence),
+  chosen service-by-service — `svc-ftl`, `svc-ltl`, `svc-reefer`, `svc-flatbed`,
+  `svc-expedited`, `svc-specialized`, `hero-carriers-cab`, `hero-industries-job`.
+- About "Our Story": `story-arizona.jpg` (Superstition Mountains, east of Phoenix).
+- **All inner-page heroes render grayscale** (`.page-hero .hero-media img`) so the neon
+  green and the typography carry the frame. The statement section's photo is knocked back
+  the same way so the type stays the subject.
+- The client's earlier low-resolution photos (`client-flatbed` 650px, `client-tanker` 686px,
+  etc.) are still in `images/` but are no longer used on the Capabilities strip; they were
+  too small to hold a full-width panel.
