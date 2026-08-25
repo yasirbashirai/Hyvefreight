@@ -20,6 +20,7 @@
   --font-head: 'Montserrat', 'Helvetica Neue', sans-serif;
   --font-body: 'Inter', 'Helvetica Neue', sans-serif;
   --font-script: 'Caveat', cursive;
+  --font-flow: 'Kaushan Script', 'Segoe Script', cursive;   /* smooth semi-handwritten, not classic cursive */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -59,8 +60,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.12; letter-spacin
   background: var(--lime);
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
-.section { padding: clamp(4.5rem, 9vw, 8rem) 0; position: relative; }
-.section-head { max-width: 860px; margin-bottom: clamp(2.2rem, 5vw, 4rem); }
+.section { padding: clamp(5.4rem, 10.2vw, 9.6rem) 0; position: relative; }
+.section-head { max-width: 860px; margin-bottom: clamp(2.7rem, 5.6vw, 4.8rem); }
 .section-head h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 800; margin: .8rem 0 1rem; }
 .section-head p { color: var(--gray); font-size: 1.06rem; }
 
@@ -116,6 +117,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.12; letter-spacin
   filter: saturate(1.25) drop-shadow(0 0 10px rgba(139, 207, 6, .45));
 }
 .site-header.scrolled .brand-hex { width: 50px; }
+/* neon on white needs a touch less bloom to stay crisp */
+.site-header.scrolled .brand-hex { filter: saturate(1.3) brightness(.95) drop-shadow(0 0 6px rgba(139, 207, 6, .3)); }
 .brand-word {
   overflow: hidden; max-width: 300px; opacity: 1;
   transition: max-width .45s ease, opacity .35s ease, transform .45s ease;
@@ -134,6 +137,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.12; letter-spacin
   text-transform: uppercase; white-space: nowrap; margin-right: -.28em;
 }
 .hero-dark .site-header:not(.scrolled) .brand-name { color: #fff; }
+.hero-dark .site-header:not(.scrolled) .brand-sub { color: var(--lime); }
 
 .main-nav { display: flex; gap: 1.9rem; margin-left: auto; }
 .main-nav a {
@@ -181,66 +185,74 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
   overflow: hidden; padding: 7.5rem 0 5rem;
 }
 .hero-media { position: absolute; inset: -16% 0; z-index: -2; }
+.hero-media picture { display: block; width: 100%; height: 100%; }
 .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; }
-.hero .hero-media img { filter: saturate(1.25) contrast(1.08) brightness(1.02); }
+
+/* the homepage hero is grayscale like every other hero; the neon is the only colour */
+.hero .hero-media { inset: -8% 0; }
+.hero .hero-media img { filter: grayscale(1) contrast(1.05) brightness(.97); }
+/* the frame is 2.28:1 and the hero is not, so bias the crop to keep the truck in shot */
+.hero .hero-media img { object-position: 62% 52%; }
+/* dark only where the words are: the truck and the range stay open */
 .hero-scrim {
   position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(to bottom, rgba(255,255,255,.65) 0%, transparent 16%),
-    linear-gradient(100deg, rgba(250, 252, 245, .9) 0%, rgba(250, 252, 245, .62) 32%, rgba(250,252,245,.06) 60%, rgba(7,7,7,0) 100%),
-    linear-gradient(to top, rgba(255,255,255,.75) 0%, transparent 22%);
+    linear-gradient(96deg, rgba(7,7,7,.84) 0%, rgba(7,7,7,.7) 24%, rgba(7,7,7,.34) 48%, rgba(7,7,7,.08) 66%, rgba(7,7,7,0) 82%),
+    linear-gradient(to bottom, rgba(7,7,7,.52) 0%, rgba(7,7,7,0) 24%),
+    linear-gradient(to top, rgba(7,7,7,.46) 0%, rgba(7,7,7,0) 28%);
 }
 .hero .container { width: min(1660px, 96vw); }
 .hero-content { max-width: 780px; }
 
 .hero-title {
   font-size: clamp(3rem, 8.4vw, 6.4rem); font-weight: 900;
-  text-transform: none; color: var(--ink); line-height: .98;
+  text-transform: none; color: #fff; line-height: .98;
+  text-shadow: 0 2px 26px rgba(7, 7, 7, .5);
 }
 .hero-title .line { display: block; }
 .hero-title .line .strike-wrap { display: inline-block; position: relative; }
 .strike-line {
-  position: absolute; left: -5%; top: 50%; width: 110%; height: 1.1em;
-  overflow: visible; pointer-events: none; transform: translateY(-50%) rotate(-1.2deg);
+  position: absolute; left: -3%; top: 50%; width: 105%; height: 1.02em;
+  overflow: visible; pointer-events: none; transform: translateY(-52%) rotate(-1deg);
 }
+/* two deliberate passes, not a scribble: BROKERS has to stay readable under them */
 .strike-line path {
-  stroke: var(--lime-deep); fill: none; stroke-linecap: round; stroke-linejoin: round;
-  filter: drop-shadow(0 0 10px rgba(159, 232, 15, .55));
+  stroke: #fff; fill: none; stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 2px 10px rgba(7, 7, 7, .55));
 }
-/* uneven weights read as a real marker, not a drawn line */
-.strike-line .s1 { stroke-width: 6.5; }
-.strike-line .s2 { stroke-width: 5.5; opacity: .92; }
-.strike-line .s3 { stroke-width: 4; opacity: .8; }
-.strike-line .s4 { stroke-width: 4; opacity: .8; }
-.strike-line .s5 { stroke-width: 5; opacity: .85; }
+.strike-line .s1 { stroke-width: 7; }
+.strike-line .s2 { stroke-width: 6.2; }
 .hero-partners {
   display: block; font-family: var(--font-script); font-weight: 700;
   font-size: clamp(4.4rem, 12vw, 9.4rem); line-height: .8;
-  color: var(--lime-deep); transform: rotate(-4deg); margin: .02em 0 0 .3em;
-  text-shadow: 0 0 28px rgba(166, 232, 26, .4);
+  color: var(--lime); transform: rotate(-4deg); margin: .02em 0 0 .3em;
+  text-shadow: 0 0 34px rgba(159, 232, 15, .55), 0 2px 18px rgba(7, 7, 7, .45);
 }
 .hero-partners .underline { display: block; width: 72%; height: 16px; margin: -2px 0 0 10%; overflow: visible; }
 .hero-partners .underline path { stroke: var(--lime); stroke-width: 7; fill: none; stroke-linecap: round; }
 
 .hero-tag {
   font-family: var(--font-head); font-weight: 700;
-  font-size: clamp(1.05rem, 2.2vw, 1.45rem); margin: 1.6rem 0 2.2rem; color: var(--ink);
-  text-shadow: 0 0 14px rgba(255,255,255,.85), 0 1px 2px rgba(255,255,255,.6);
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem); margin: 1.6rem 0 2.2rem; color: #fff;
+  text-shadow: 0 2px 16px rgba(7,7,7,.7);
 }
+.hero-tag .lime { color: var(--lime); }
+.hero .btn-ghost-dark { border-color: rgba(255,255,255,.6); color: #fff; }
+.hero .btn-ghost-dark:hover { border-color: var(--lime); background: var(--lime); color: var(--ink); }
 .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
 
 .scroll-cue {
   position: absolute; left: 50%; bottom: 2rem; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: .5rem;
   font-family: var(--font-head); font-size: .66rem; font-weight: 700;
-  letter-spacing: .3em; text-transform: uppercase; color: var(--ink); opacity: .75;
+  letter-spacing: .3em; text-transform: uppercase; color: #fff; opacity: .8;
 }
 .scroll-cue .mouse {
-  width: 26px; height: 42px; border: 2px solid var(--ink); border-radius: 14px; position: relative;
+  width: 26px; height: 42px; border: 2px solid rgba(255,255,255,.85); border-radius: 14px; position: relative;
 }
 .scroll-cue .mouse::after {
   content: ''; position: absolute; left: 50%; top: 7px; width: 4px; height: 8px;
-  margin-left: -2px; border-radius: 2px; background: var(--lime-deep);
+  margin-left: -2px; border-radius: 2px; background: var(--lime);
   animation: wheel 1.6s ease-in-out infinite;
 }
 @keyframes wheel { 0%,100% { transform: translateY(0); opacity: 1; } 55% { transform: translateY(12px); opacity: 0; } }
@@ -265,7 +277,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
 /* ============================================================
    TRUST BAR
    ============================================================ */
-.trust-bar { background: var(--ink); color: #fff; padding: 2.4rem 0; }
+.trust-bar { background: var(--ink); color: #fff; padding: 3.1rem 0; }
 .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
 .trust-item { display: flex; gap: 1rem; align-items: flex-start; padding: 0 1rem; border-left: 1px solid rgba(255,255,255,.12); }
 .trust-item:first-child { border-left: 0; }
@@ -432,22 +444,43 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate
 .hexos:not(.engaged) .sp { stroke-opacity: .26; stroke-width: 1.4; stroke-dasharray: 3 9; }
 
 /* ---- narrow screens: keep the hexagon, move the copy to a card beneath it ---- */
-.hexos-readout { display: none; }
+.hexos-readout, .hexos-hint { display: none; }
 @media (max-width: 1160px) {
   .hexos { padding: 0; }
   .hexos-stage { width: min(320px, 66vw); }
   .hx-label, .hx-pop { display: none; }
+  .hexos-hint {
+    display: block; text-align: center; margin: 2.2rem auto 0;
+    font-family: var(--font-head); font-size: .68rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--gray);
+  }
+  .hexos-hint::after {
+    content: ''; display: block; width: 26px; height: 2px; margin: .7rem auto 0;
+    background: var(--lime); border-radius: 2px;
+  }
   .hexos-readout {
-    display: block; max-width: 480px; margin: 2.6rem auto 0; text-align: center;
+    display: block; max-width: 480px; margin: 1rem auto 0; text-align: center;
     background: rgba(255, 255, 255, .95); border: 1px solid var(--gray-line);
     border-top: 3px solid var(--lime); border-radius: var(--radius);
     padding: 1.4rem 1.5rem; box-shadow: 0 14px 34px rgba(7, 7, 7, .1);
   }
   .hexos-readout .hx-pop-kick { margin-inline: auto; }
+  /* the card is below the fold of the hexagon, so flag that it changed */
+  .hexos-readout.flash { animation: hxflash .5s ease; }
+  @keyframes hxflash {
+    from { transform: translateY(7px); opacity: .35; border-top-color: var(--lime-bright); }
+    to   { transform: none; opacity: 1; }
+  }
+  /* the dots are the control on touch: give them a real 46px target */
+  .hx-dot::before {
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: 46px; height: 46px; transform: translate(-50%, -50%); border-radius: 50%;
+  }
+  .hexos.engaged .hexnode.on .hx-dot { transform: translate(-50%, -50%) scale(1.5); }
 }
 @media (max-width: 560px) {
   .hexos-stage { width: min(268px, 72vw); }
-  .hx-dot { width: 17px; height: 17px; }
+  .hx-dot { width: 18px; height: 18px; }
 }
 @media (prefers-reduced-motion: reduce) { .hx-dot::after { animation: none; opacity: .35; } }
 html.no-anim .hx-dot::after { animation: none; opacity: .35; }
@@ -530,13 +563,13 @@ html.no-anim .hx-dot::after { animation: none; opacity: .35; }
 .statement {
   position: relative; color: #fff; overflow: hidden;
   min-height: 82svh; display: flex; align-items: center;
-  padding: clamp(6.5rem, 13vw, 11rem) 0;
+  padding: clamp(7.2rem, 14vw, 12.5rem) 0;
 }
 .statement .container { width: min(1660px, 96vw); }
 /* the photograph is atmosphere here; the typography is the subject */
 .statement .hero-media img {
   object-position: center 70%;
-  filter: grayscale(.7) contrast(.8) brightness(.6) saturate(.85);
+  filter: grayscale(1) contrast(.85) brightness(.62);
 }
 .statement .statement-scrim {
   position: absolute; inset: 0; z-index: -1;
@@ -546,13 +579,17 @@ html.no-anim .hx-dot::after { animation: none; opacity: .35; }
 }
 .statement h2 {
   /* scales with the viewport so each line holds on one line at every width */
-  font-size: clamp(2rem, 7.2vw, 6.1rem); font-weight: 900;
-  line-height: 1.02; letter-spacing: -.022em;
+  font-size: clamp(1.8rem, 6.1vw, 5.1rem); font-weight: 900;
+  line-height: 1.04; letter-spacing: -.022em;
 }
 .statement h2 .l1 { display: block; color: #fff; }
+/* the second line is handwritten: smooth and connected, but still plainly readable */
 .statement h2 .l2 {
   display: block; color: var(--lime);
-  text-shadow: 0 0 50px rgba(159, 232, 15, .42);
+  font-family: var(--font-flow); font-weight: 400;
+  font-size: 1.24em; line-height: 1.3; letter-spacing: 0;
+  padding: .06em 0 .12em;
+  text-shadow: 0 0 46px rgba(159, 232, 15, .4);
 }
 .statement p { max-width: 540px; margin: 1.9rem 0 2.6rem; font-size: 1.14rem; color: rgba(255,255,255,.82); }
 
@@ -692,7 +729,7 @@ html.no-anim .hx-dot::after { animation: none; opacity: .35; }
 /* ============================================================
    FOOTER
    ============================================================ */
-.site-footer { background: var(--ink); color: rgba(255,255,255,.72); padding: 4.5rem 0 2rem; }
+.site-footer { background: var(--ink); color: rgba(255,255,255,.72); padding: 5.6rem 0 2.2rem; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 2.5rem; margin-bottom: 3rem; }
 .footer-brand .brand-hex { width: 96px; margin-bottom: 1.3rem; }
 .footer-brand p { font-size: .92rem; max-width: 300px; }
@@ -732,14 +769,22 @@ html.no-anim .reveal { opacity: 1; transform: none; transition: none; }
 html.no-anim .hero, html.no-anim .page-hero { min-height: 860px; }
 html.no-anim .statement { min-height: 720px; }
 
-/* supplied brand hero photo (very wide), keep truck center-right */
-.hero .hero-media img { object-position: 55% 48%; }
-
-/* mobile: stronger uniform hero wash so headline/tagline stay legible */
+/* phones: portrait crop, headline over the sky, truck clear in the lower third */
 @media (max-width: 700px) {
+  .hero { align-items: flex-start; padding: 7.6rem 0 3.5rem; min-height: 92svh; }
+  .hero .hero-media { inset: -4% 0; }
+  .hero .hero-media img { object-position: 50% 50%; }
   .hero-scrim {
-    background: linear-gradient(to bottom, rgba(250,252,245,.85) 0%, rgba(250,252,245,.6) 55%, rgba(255,255,255,.9) 100%);
+    background:
+      linear-gradient(to bottom, rgba(7,7,7,.84) 0%, rgba(7,7,7,.64) 32%, rgba(7,7,7,.22) 55%, rgba(7,7,7,.05) 72%),
+      linear-gradient(to top, rgba(7,7,7,.5) 0%, rgba(7,7,7,0) 26%);
   }
+  /* tightened so the CTAs clear the cab */
+  .hero-title { line-height: .95; }
+  .hero-tag { margin: 1.1rem 0 1.5rem; }
+  .hero-ctas { gap: .7rem; }
+  .hero-ctas .btn { padding: .92rem 1.5rem; }
+  .scroll-cue { display: none; }
 }
 
 /* footer logo: the neon mark sits straight on the dark ground */
@@ -778,7 +823,7 @@ html.no-anim .statement { min-height: 720px; }
   .hero-title { font-size: 2.9rem; }
   .hero-partners { font-size: 3.9rem; }
   .hero-ctas .btn { width: 100%; }
-  .section { padding: 3.8rem 0; }
+  .section { padding: 4.5rem 0; }
 }
 
 /* phones: comfortable paddings and stacked grids everywhere */
@@ -794,7 +839,21 @@ html.no-anim .statement { min-height: 720px; }
 .quote-wrap > *, .split > *, .card-grid > *, .form-grid > *, .footer-grid > * { min-width: 0; }
 .field input, .field select, .field textarea { min-width: 0; max-width: 100%; }
 
-/* mobile: deeper lime for tagline words over the light wash */
-@media (max-width: 700px) {
-  .hero-tag .lime { color: #6fa708; }
+
+
+/* ============================================================
+   CTA BAND — same "Stronger Connections. Seamless Deliveries." lockup
+   ============================================================ */
+.cta-band h2 { font-size: clamp(1.8rem, 5.2vw, 3.5rem); font-weight: 900; line-height: 1.06; text-align: center; }
+.cta-band h2 .flow {
+  font-family: var(--font-flow); font-weight: 400; color: var(--lime-deep);
+  font-size: 1.2em; line-height: 1.35; display: inline-block; padding: .05em 0 .1em;
+}
+.cta-band p { text-align: center; max-width: 620px; margin: 1.1rem auto 2rem; color: var(--gray); }
+
+/* the Our Story column now leads with copy, so the opening line carries the weight */
+.split-copy .eyebrow + .story-open { margin-top: 1.6rem; }
+.split-copy .story-open {
+  font-size: clamp(1.16rem, 1.9vw, 1.4rem); line-height: 1.62;
+  color: var(--ink); font-weight: 500;
 }
