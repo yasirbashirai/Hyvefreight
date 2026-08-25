@@ -100,12 +100,21 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.12; letter-spacin
    ============================================================ */
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-  transition: background .35s ease, box-shadow .35s ease, padding .35s ease;
+  transition: box-shadow .35s ease, padding .35s ease;
   padding: 1.1rem 0;
 }
-.site-header.scrolled {
+/* The white bar gets its own layer on purpose. A backdrop-filter on .site-header
+   itself would make the header a containing block for the fixed mobile nav inside
+   it, so .main-nav's inset:0 would resolve to the ~74px header instead of the
+   viewport and translateY(-100%) would leave the last links stuck on screen. */
+.site-header::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
   background: rgba(255, 255, 255, .92);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  opacity: 0; transition: opacity .35s ease;
+}
+.site-header.scrolled::before { opacity: 1; }
+.site-header.scrolled {
   box-shadow: 0 6px 30px rgba(7,7,7,.08);
   padding: .55rem 0;
 }
