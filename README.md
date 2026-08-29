@@ -10,8 +10,11 @@ Conversion-focused marketing site for **HYVE Freight Services**, a freight broke
 - **The company name is always written `HYVE Freight Services`** — never "Hyve". Applies to
   copy, headings, titles, metadata, alt text and the footer.
 - Headline treatment: Freight ~~Brokers~~ *Partners*. "Brokers" is struck through by **two**
-  bold white marker strokes (`.strike-line .s1`/`.s2`, drawn on by GSAP) — deliberate and
-  hand-drawn, not a scribble, and the word must stay readable under them. "Partners" is
+  bold **black** marker strokes (`.strike-line .s1`/`.s2`, drawn on by GSAP) — deliberate and
+  hand-drawn, not a scribble, and the word must stay readable under them.
+  Black, not white: white type over the grayscale plate meant white strokes muddied the word
+  and read as a highlight. Black keeps BROKERS legible AND reads instantly as a cross-out.
+  A white halo around the black strokes just makes them glow — the edge stays clean. "Partners" is
   handwritten Caveat in neon green with a neon underline.
 - The six standards: HEXpertise · HEXecution · HEXcellence · HEXperience · HEXchange · HEXpectation
 - Taglines: "Every Side Connected. Every Load Delivered." · "Stronger Connections. Seamless Deliveries."
@@ -29,11 +32,17 @@ Conversion-focused marketing site for **HYVE Freight Services**, a freight broke
 - Logo lockup collapses to H-hexagon on scroll (Dynamo-style). The mark is the supplied
   hexagon-H (`images/logo-mark.png`) shown as-is; do NOT re-apply a CSS hexagon clip-path
   around it or it reads as a hexagon inside a hexagon.
+- Footer carries the **full lockup** (hexagon + HYVE / FREIGHT SERVICES), not the bare mark —
+  same treatment as the header, recoloured for the dark ground (`.footer-lockup`).
 - **The HEX Standard** is one large hexagon with six live points (`.hexos`): the H sits at the
   centre, each vertex carries a pulsing dot + label, and hovering/focusing a point opens a
   card explaining that standard. Under 1160px the cards are replaced by a single readout
   card beneath the hexagon, driven by the same JS. Markup is duplicated in `index.html`
   and `about.html`, styles live under "THE HEX STANDARD" in `style.css`.
+- HEX Standard sizing is deliberate and Ben-approved: stage `min(418px, 41vw)`, labels
+  `1.14rem`, dots `26px`. `.hexos` padding-top is the clearance the **top pop-up card** needs —
+  drop it further and the HEXpertise card lands on the section sub-headline. The top and bottom
+  cards are `566px` wide precisely so they wrap to two lines and stay short enough to fit.
 - Under 1160px the HEX Standard is **tap-to-open**: the hover binding is skipped when
   `(hover: hover) and (pointer: fine)` is false, each dot carries a 46px `::before` hit area,
   and the readout card below flashes on every tap so the change gets noticed.
@@ -53,8 +62,8 @@ Static site — deploy `public/` as root (Vercel auto-serves `public/`).
   foreground road (source y 0–700) so the truck lands in the lower third and the headline gets
   clear sky; the wide crop uses `object-position: 62% 52%` to keep the truck in frame.
 - The hero scrim is dark and **left-weighted** (96deg, .84 → 0 by 82%) so the words have contrast
-  without a flat overlay across the truck and the range. Headline, tagline and both strike
-  strokes are white; only "Partners" and the tagline accents carry the neon.
+  without a flat overlay across the truck and the range. Headline and tagline are white and
+  the two strike strokes are black; only "Partners" and the tagline accents carry the neon.
 - Statement panel: same grayscale rule as the heroes.
 - Capabilities strip: the client's own US truck photos (`~/long usa truck images`), one per
   service — `svc-ftl` (Dry-Van-Trailer-2), `svc-ltl` (long trucks for freigt),
@@ -92,8 +101,25 @@ the HEX Standard graphic, so thickening it once covered all three.
 - `--font-flow` **Kaushan Script** — the smooth semi-handwritten voice ("Seamless Deliveries.",
   `.statement h2 .l2` and `.cta-band h2 .flow`). Deliberately not a classic cursive.
 
+## Vertical rhythm
+Ben asked for the whole site to run 5–10% tighter without crowding anything. The levers, all in
+`style.css` — change these rather than padding individual sections:
+- `.section` padding and `.section-head` margin-bottom (the two that move every page)
+- `.section:has(+ .statement)` — the light section before the full-bleed dark statement panel
+  gets a much smaller bottom pad. The dark panel separates itself; a full pad above it just
+  produced the band of white Ben flagged between Capabilities and "Stronger Connections."
+- `.statement` min-height, `.trust-bar`, `.site-footer`, `.page-hero`
+
+Measured with the probe below (document height, committed vs working): index −6.8%, about −6.5%,
+shippers −5.2%, carriers −4.2%, industries −4.1%. In `?noanim` the heroes are pinned at 860px,
+which understates the section-only reduction — excluding the pinned hero every page lands 5–8%.
+
 ## QA harness
 `python3 -m http.server 8788` in `public/`. **Headless Chrome floors its viewport at 500px**, so
 phone widths must be driven over CDP (`Emulation.setDeviceMetricsOverride`) — a `--window-size=390`
 screenshot silently renders at 500px and lies. Append `?noanim` to freeze motion and `?debugw` to
 list overflow offenders in `document.title`.
+
+`Page.captureScreenshot` **hangs** with `captureBeyondViewport: true` on current Chrome — scroll
+the page and clip inside the viewport instead. And a reused `--user-data-dir` serves a **cached
+stylesheet**, so CSS edits look like no-ops; send `Network.setCacheDisabled` on every run.
