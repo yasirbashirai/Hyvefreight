@@ -50,6 +50,11 @@ Conversion-focused marketing site for **HYVE Freight Services**, a freight broke
 - GSAP + ScrollTrigger (vendored in `public/js/vendor/`) — strike-draw, parallax, reveals
 - Quote modal on every page + inline forms
 - Forms currently compose an email to sales@hyvedelivers.com (mailto). TODO: wire a form backend/SMTP before launch.
+- **SMS / mobile-data consent notice** (`.form-disclaimer`) sits in fine print at the very
+  bottom of every quote-request form (the `#quote` section form on the home page and the quote
+  modal on all 5 pages) and the About page's "Send Us a Message" form — client-supplied wording,
+  matching the pattern on midasfreight.com/contact. It is deliberately NOT on the carrier-packet
+  form on `carriers.html`; Ben scoped it to the quote and message forms.
 - SEO: unique titles/descriptions/keywords, OG tags, JSON-LD (LocalBusiness, Service, AboutPage)
 - Phone number intentionally NOT displayed (client requirement)
 

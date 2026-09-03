@@ -648,6 +648,11 @@ html.no-anim .hx-dot::after { animation: none; opacity: .35; }
 }
 .field textarea { resize: vertical; min-height: 90px; }
 .form-note { font-size: .8rem; color: var(--gray); margin-top: .9rem; }
+/* SMS / mobile-data consent notice, fine print at the very bottom of a form card */
+.form-disclaimer {
+  font-size: .68rem; line-height: 1.5; color: var(--gray); opacity: .78;
+  margin-top: .85rem; padding-top: .7rem; border-top: 1px solid var(--gray-line);
+}
 .form-card .btn { width: 100%; margin-top: 1.2rem; }
 @media (max-width: 900px) { .quote-wrap { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } }
 
