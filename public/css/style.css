@@ -653,6 +653,10 @@ html.no-anim .hx-dot::after { animation: none; opacity: .35; }
   font-size: .68rem; line-height: 1.5; color: var(--gray); opacity: .78;
   margin-top: .85rem; padding-top: .7rem; border-top: 1px solid var(--gray-line);
 }
+/* second notice in the stack: no repeated hairline, just a small gap */
+.form-disclaimer + .form-disclaimer {
+  margin-top: .55rem; padding-top: 0; border-top: 0;
+}
 .form-card .btn { width: 100%; margin-top: 1.2rem; }
 @media (max-width: 900px) { .quote-wrap { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } }
 
